@@ -105,8 +105,10 @@ async def time(websocket, path):
             # print(red_num)
             # print(black_num)
             if red_num > 100 and black_num < 30 and x_temp != x:
-                print('the position is ', x, 'the doc is ', dict_doc[class_str])
-                now = {'dock':dict_doc[class_str],'slider':x}
+                # percentage
+                xp = x / 300
+                print('the position is ', xp, 'the doc is ', dict_doc[class_str])
+                now = {'dock':dict_doc[class_str],'slider':xp}
                 x_temp = x
                 await websocket.send(json.dumps(now))
                 # print(x / slider_real_height)
@@ -122,7 +124,7 @@ async def time(websocket, path):
     cap.release()
     cv2.destroyAllWindows()
 
-start_server = websockets.serve(time, '127.0.0.1', 5678)
+start_server = websockets.serve(time, '192.168.1.74', 5678)
 
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()
