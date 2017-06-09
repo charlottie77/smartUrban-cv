@@ -19,10 +19,10 @@ async def time(websocket, path):
     lower_red = np.array([0, 100, 100])
     # gray threshold in gray space
     gray_threshold = 127
-    slider_begin_x = 200
-    slider_begin_y = 0
-    slider_end_x = 250
-    slider_end_y = 600
+    slider_begin_x = 235
+    slider_begin_y = 110
+    slider_end_x = 275
+    slider_end_y = 390
 
     slider_height = slider_end_y - slider_begin_y
 
@@ -30,10 +30,10 @@ async def time(websocket, path):
     slider_reg_height = 600
     # slider_real_height = 0
 
-    doc_begin_x = 300
-    doc_begin_y = 0
-    doc_end_x = 350
-    doc_end_y = 50
+    doc_begin_x = 235
+    doc_begin_y = 40
+    doc_end_x = 280
+    doc_end_y = 80
 
     doc_reg = 50
     doc_1 = doc_reg // 4
@@ -48,14 +48,14 @@ async def time(websocket, path):
         '0010': 'null',
         '0011': 'null',
         '0100': 'null',
-        '0101': 's1',
+        '0101': 'S1',
         '0110': 'null',
         '0111': 'null',
         '1000': 'null',
-        '1001': '24h',
+        '1001': 'Day',
         '1010': 'null',
         '1011': 'null',
-        '1100': 's2',
+        '1100': 'S2',
         '1101': 'null',
         "1110": 'null',
         "1111": 'null'
@@ -106,7 +106,9 @@ async def time(websocket, path):
             # print(black_num)
             if red_num > 100 and black_num < 30 and x_temp != x:
                 # percentage
-                xp = x / 300
+                xp = 1 - (((x-114) / 276) / 0.6)
+                if xp > 1:
+                    xp = 1
                 print('the position is ', xp, 'the doc is ', dict_doc[class_str])
                 now = {'dock':dict_doc[class_str],'slider':xp}
                 x_temp = x
@@ -124,7 +126,7 @@ async def time(websocket, path):
     cap.release()
     cv2.destroyAllWindows()
 
-start_server = websockets.serve(time, '192.168.1.74', 5678)
+start_server = websockets.serve(time, '127.0.0.1', 5678)
 
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()
